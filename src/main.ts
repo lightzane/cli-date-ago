@@ -10,9 +10,9 @@ commander
 
     .option('-a, --author', 'outputs the author of this code')
     .option('-d, --debug', 'Output extra debugging')
-    .option('-dd, --days, --day', 'Display time as days')
-    .option('-hh, --hours, --hour', 'Display time as hours')
-    .option('-mm, --minutes, --minute', 'Display time as minutes');
+    .option('-dd, --days', 'Display time as days')
+    .option('-hh, --hours', 'Display time as hours')
+    .option('-mm, --minutes', 'Display time as minutes');
 // .option('-p, --pizza-type <type>', 'Outputs a phrase about pizza', 'vegetarian'); // vegetarian = default value
 
 commander.parse(process.argv);
@@ -44,14 +44,17 @@ const intervals = {
 };
 
 let timeDiff: number;
-let ago: string;
+let ago: string = 'ago';
 
 function dateAgo(pastDate: string, futureDate?: string): string {
     let future = futureDate || new Date();
 
     try { new Date(future); } catch (err) { future = new Date(); }
 
-    ago = futureDate ? 'difference' : 'ago';
+    if (futureDate && !futureDate?.includes('-')) { // futureDate is not a flag
+        ago = 'difference';
+    }
+
     const seconds = (+new Date(future) - +new Date(pastDate)) / 1000; // convert from milliseconds to seconds
     timeDiff = seconds; // will be used outside of this method when needed by commander.options.hours etc
 

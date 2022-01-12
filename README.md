@@ -107,8 +107,8 @@ commander
     .helpOption('-h, --help', 'Output usage information')
 
     .option('-d, --debug', 'Output extra debugging')
-    .option('-hh, --hours, --hour', 'Display time as hour')
-    .option('-mm, --minutes, --minute', 'Display time as minutes')
+    .option('-hh, --hours', 'Display time as hour')
+    .option('-mm, --minutes', 'Display time as minutes')
     .option('-p, --pizza-type <type>', 'Outputs a phrase about pizza', 'vegetarian');
 
 commander.parse(process.argv);
@@ -116,8 +116,7 @@ if (!process.argv.slice(2).length) commander.outputHelp(); // the user args will
 
 const options = commander.opts();
 if (options.debug) console.log(options);
-if (options.hh) {
-} // same with options.hours or options.hour depending on how you declared it in .option()
+if (options.hh) {} // same with options.hours depending on how you declared it in .option()
 if (options.pizzaType) console.log(`Your pizza type is: ${options.pizzaType}`);
 ```
 

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Diff</title>
+</head>
+
+<body style="font-size: 2em">
+    <input type="date" id="startDate">
+    <input type="date" id="endDate">
+    <button onclick="calculate()">Submit</button>
+    <pre id="result"></pre>
+    <script>
+        const txtStartDate = document.getElementById('startDate')
+        const txtEndDate = document.getElementById('endDate')
+        const result = document.getElementById('result')
+
+        txtStartDate.value = new Date().toISOString().substring(0, 10)
+        txtEndDate.value = new Date(+new Date() + 1000 * 60 * 60 * 24 * 5).toISOString().substring(0, 10)
+
+        const intervals = {
+            year: 31536000,
+            month: 2592000,
+            week: 604800,
+            day: 86400,
+            hour: 3600,
+            minute: 60,
+            second: 0
+        };
+        let timeDiff;
+        let ago = 'ago';
+
+        function dateAgo(pastDate, futureDate) {
+
+            let future = futureDate || new Date();
+
+            try {
+                new Date(future);
+            }
+            catch (err) {
+                future = new Date();
+            }
+
+            if (+new Date(pastDate) > +new Date(future)) {
+                ago = 'to go';
+                const tmp = future;
+                future = pastDate;
+                pastDate = tmp.toString();
+            }
+
+            if (futureDate) {
+                ago = 'difference';
+            } else ago = 'ago'
+
+            const seconds = (+new Date(future) - +new Date(pastDate)) / 1000; // convert from milliseconds to seconds
+            timeDiff = seconds; // will be used outside of this method when needed by commander.options.hours etc
+            if (seconds < 29)
+                return 'Just now';
+            for (let i in intervals) {
+                let counter = Math.floor(seconds / intervals[i]);
+                if (counter > 0)
+                    if (counter === 1)
+                        return `${counter} ${i} ${ago}`;
+                    else
+                        return `${counter} ${i}s ${ago}`;
+            }
+            return ''; // 'No input date detected...';
+        }
+
+        function calculate() {
+
+            if (!txtStartDate.value) return
+
+            const start = new Date(txtStartDate.value).toLocaleDateString()
+            let end
+
+            if (txtEndDate.value) end = new Date(txtEndDate.value).toLocaleDateString()
+
+            result.innerHTML = dateAgo(start, end)
+            result.innerHTML += '<br> ----- <br>'
+            result.innerHTML += Math.floor(timeDiff / 60 / 60 / 24) + ' days ' + ago + '<br>'
+            result.innerHTML += Math.floor(timeDiff / 60 / 60) + ' hours ' + ago + '<br>'
+            result.innerHTML += Math.floor(timeDiff / 60) + ' minutes ' + ago + '<br>'
+        }
+
+
+        calculate()
+    </script>
+</body>
+
+</html>

@@ -2,20 +2,33 @@
 // this is a utility to help you output version, help, etc
 import { Command } from 'commander';
 const commander = new Command();
+
 commander
     .version(require('./../package.json').version, '-v, --version', 'Output current version')
     .usage('<command> [options]')
-    .helpOption('-h, --help', 'Output usage information');
+    .helpOption('-h, --help', 'Output usage information')
+
+    .option('-d, --debug', 'Output extra debugging')
+    .option('-hh, --hours, --hour', 'Display time as hour')
+    .option('-mm, --minutes, --minute', 'Display time as minutes');
+// .option('-p, --pizza-type <type>', 'Outputs a phrase about pizza', 'vegetarian'); // vegetarian = default value
+
 commander.parse(process.argv);
 // if (!process.argv.slice(2).length) commander.outputHelp();
 
-
+const options = commander.opts();
+if (options.debug) console.log(options);
+// if (options.pizzaType) console.log(`Your pizza type is: ${options.pizzaType}`);
 
 // *************************************************************************
 // ! Core Logic
 // *************************************************************************
 const pastDate = process.argv[2] || '1/1/1970';
-const futureDate = process.argv[3];
+let futureDate = process.argv[3]; // this argv[3] can either be a date or a flag
+
+// ensures that the argument is not a flag
+// or an option from the commander
+if (futureDate?.includes('-', 0)) futureDate = new Date().toISOString();
 
 const intervals = {
     year: 31536000,
@@ -27,10 +40,17 @@ const intervals = {
     second: 0
 };
 
+let timeDiff: number;
+let ago: string;
+
 function dateAgo(pastDate: string, futureDate?: string): string {
     let future = futureDate || new Date();
-    let ago = futureDate ? 'difference' : 'ago';
+
+    try { new Date(future); } catch (err) { future = new Date(); }
+
+    ago = futureDate ? 'difference' : 'ago';
     const seconds = (+new Date(future) - +new Date(pastDate)) / 1000; // convert from milliseconds to seconds
+    timeDiff = seconds; // will be used outside of this method when needed by commander.options.hours etc
 
     if (seconds < 29) return 'Just now';
 
@@ -45,3 +65,6 @@ function dateAgo(pastDate: string, futureDate?: string): string {
 }
 
 console.log(dateAgo(pastDate, futureDate));
+
+if (options.hours) console.log(Math.floor(timeDiff / 60 / 60) + ' hours ' + ago);
+if (options.minutes) console.log(Math.floor(timeDiff / 60) + ' minutes ' + ago);

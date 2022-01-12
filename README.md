@@ -44,19 +44,24 @@ Thus, also applying the same for the `dateago.cmd`
 
 ```batch
 @ECHO off
-
-SET past=%1
-SET future=%2
 SET dp0=%~dp0
-
-IF "%future%" == "" (
-    node %dp0% %past%
-) ELSE (
-    node %dp0% %past% %future%
-)
+node %dp0% %*
 ```
 
 Running `dateago -v` will be intercept by `Commander` via `.parse()`
+```cli
+dateago -v
+dateago --help
+```
+
+Notes:
+
+| Syntax  | Description                                                             |
+| ------- | ----------------------------------------------------------------------- |
+| `%~dp0` | gets the local directory path of the .cmd file in which it was executed |
+| `%1`    | gets the first argument in batchfile                                    |
+| `%1`    | gets the second argument in batchfile                                   |
+| `%*`    | gets all the argument                                                   |
 
 ## Commander
 
@@ -65,7 +70,11 @@ Typescript
 ```typescript
 import { Command } from 'commander';
 const commander = new Command();
-commander.version(require('./../package.json').version, '-v, --version', 'Output current version').usage('<command> [options]').helpOption('-h, --help', 'Output usage information');
+commander
+    .version(require('./../package.json').version, '-v, --version', 'Output current version')
+    .usage('<command> [options]')
+    .helpOption('-h, --help', 'Output usage information');
+
 commander.parse(process.argv);
 // if (!process.argv.slice(2).length) commander.outputHelp();
 ```
@@ -74,9 +83,36 @@ Javascript
 
 ```javascript
 const commander = require('commander');
-commander.version(require('./../package.json').version, '-v, --version', 'Output current version').usage('<command> [options]').helpOption('-h, --help', 'Output usage information');
+commander
+    .version(require('./../package.json').version, '-v, --version', 'Output current version')
+    .usage('<command> [options]')
+    .helpOption('-h, --help', 'Output usage information');
+
 commander.parse(process.argv);
 // if (!process.argv.slice(2).length) commander.outputHelp();
+```
+
+## Commander with additional options
+
+```typescript
+import { Command } from 'commander';
+const commander = new Command();
+commander
+    .version(require('./../package.json').version, '-v, --version', 'Output current version')
+    .usage('<command> [options]')
+    .helpOption('-h, --help', 'Output usage information')
+
+    .option('-d, --debug', 'Output extra debugging')
+    .option('-hh, --hours, --hour', 'Display time as hour')
+    .option('-mm, --minutes, --minute', 'Display time as minutes')
+    .option('-p, --pizza-type <type>', 'Outputs a phrase about pizza', 'vegetarian');
+
+commander.parse(process.argv);
+
+const options = commander.opts()
+if (options.debug) console.log(options)
+if (options.hh) {} // same with options.hours or options.hour depending on how you declared it in .option()
+if (options.pizzaType) console.log(`Your pizza type is: ${options.pizzaType}`);
 ```
 
 ## Global setup (Environment Variables)

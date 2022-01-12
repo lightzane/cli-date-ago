@@ -1,11 +1,12 @@
 @ECHO off
 
-SET past=%1
-SET future=%2
+@REM SET past=%1
+@REM SET future=%2
 SET dp0=%~dp0
 
-IF "%future%" == "" (
-    node %dp0% %past%
-) ELSE (
-    node %dp0% %past% %future%
-)
+@REM IF "%future%" == "" (
+@REM     node %dp0% %past%
+@REM ) ELSE (
+@REM     node %dp0% %past% %future%
+@REM )
+node %dp0% %*

@@ -9,8 +9,10 @@ commander
     .helpOption('-h, --help', 'Output usage information')
 
     .option('-d, --debug', 'Output extra debugging')
-    .option('-hh, --hours, --hour', 'Display time as hour')
-    .option('-mm, --minutes, --minute', 'Display time as minutes');
+    .option('-dd, --days, --day', 'Display time as days')
+    .option('-hh, --hours, --hour', 'Display time as hours')
+    .option('-mm, --minutes, --minute', 'Display time as minutes')
+    .option('-a, --author', 'outputs the author of this code');
 // .option('-p, --pizza-type <type>', 'Outputs a phrase about pizza', 'vegetarian'); // vegetarian = default value
 
 commander.parse(process.argv);
@@ -18,6 +20,7 @@ commander.parse(process.argv);
 
 const options = commander.opts();
 if (options.debug) console.log(options);
+if (options.author) console.log(require('./../package.json').author);
 // if (options.pizzaType) console.log(`Your pizza type is: ${options.pizzaType}`);
 
 // *************************************************************************
@@ -66,5 +69,6 @@ function dateAgo(pastDate: string, futureDate?: string): string {
 
 console.log(dateAgo(pastDate, futureDate));
 
+if (options.days) console.log(Math.floor(timeDiff / 60 / 60 / 24) + ' days ' + ago);
 if (options.hours) console.log(Math.floor(timeDiff / 60 / 60) + ' hours ' + ago);
 if (options.minutes) console.log(Math.floor(timeDiff / 60) + ' minutes ' + ago);

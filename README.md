@@ -7,6 +7,7 @@ Your own customized CLI that depends on NodeJS which can run on CMD
 ```
 npm i
 dateago --version
+dateago 1/7/2022 1/10/2022 -hh -mm
 ```
 
 ### Create your own CLI

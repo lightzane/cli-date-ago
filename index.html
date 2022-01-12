@@ -9,8 +9,8 @@
 </head>
 
 <body style="font-size: 2em">
-    <input type="date" id="startDate">
-    <input type="date" id="endDate">
+    <input type="datetime-local" id="startDate">
+    <input type="datetime-local" id="endDate">
     <button onclick="calculate()">Submit</button>
     <pre id="result"></pre>
     <script>
@@ -18,8 +18,8 @@
         const txtEndDate = document.getElementById('endDate')
         const result = document.getElementById('result')
 
-        txtStartDate.value = new Date().toISOString().substring(0, 10)
-        txtEndDate.value = new Date(+new Date() + 1000 * 60 * 60 * 24 * 5).toISOString().substring(0, 10)
+        txtStartDate.value = new Date().toISOString().substring(0, 19)
+        txtEndDate.value = new Date(+new Date() + 1000 * 60 * 60 * 24 * 5).toISOString().substring(0, 19)
 
         const intervals = {
             year: 31536000,
@@ -74,10 +74,12 @@
 
             if (!txtStartDate.value) return
 
-            const start = new Date(txtStartDate.value).toLocaleDateString()
+            const start = new Date(txtStartDate.value)
             let end
 
-            if (txtEndDate.value) end = new Date(txtEndDate.value).toLocaleDateString()
+            console.log(start)
+
+            if (txtEndDate.value) end = new Date(txtEndDate.value)
 
             result.innerHTML = dateAgo(start, end)
             result.innerHTML += '<br> ----- <br>'

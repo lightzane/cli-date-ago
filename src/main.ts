@@ -1,6 +1,8 @@
 // npm install commander.
 // this is a utility to help you output version, help, etc
 import { Command } from 'commander';
+
+// argument must match with <filename>.cmd
 const commander = new Command('dateago'); // dateago - will be show when calling --help flag
 
 commander
@@ -8,7 +10,7 @@ commander
     .usage('<pastDate, futureDate?> [options]')
     .helpOption('-h, --help', 'Output usage information')
 
-    .option('-a, --author', 'outputs the author of this code')
+    .option('-a, --author', 'Outputs the author of this code')
     .option('-d, --debug', 'Output extra debugging')
     .option('-dd, --days', 'Display time as days')
     .option('-hh, --hours', 'Display time as hours')
@@ -47,11 +49,24 @@ let timeDiff: number;
 let ago: string = 'ago';
 
 function dateAgo(pastDate: string, futureDate?: string): string {
+    // if there are no other arguments or flags, futureDate will be undefined
     let future = futureDate || new Date();
 
+    // if there are flags, futureDate is still defined, so give it a new date
     try { new Date(future); } catch (err) { future = new Date(); }
 
-    if (futureDate && !futureDate?.includes('-')) { // futureDate is not a flag
+    // check if first date input is greater than future date
+    // reverse the 2 dates
+    if (+new Date(pastDate) > +new Date(future)) {
+        ago = 'to go';
+
+        const tmp = future;
+        future = pastDate;
+        pastDate = tmp.toString();
+    }
+
+    // ensure that futureDate is not a flag
+    if (futureDate && !futureDate?.includes('-')) {
         ago = 'difference';
     }
 

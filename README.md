@@ -73,6 +73,7 @@ Typescript
 
 ```typescript
 import { Command } from 'commander';
+// argument must match with <filename>.cmd
 const commander = new Command('dateago'); // dateago - will be show when calling --help flag
 commander
     .version(require('./../package.json').version, '-v, --version', 'Output current version')
@@ -100,6 +101,7 @@ if (!process.argv.slice(2).length) commander.outputHelp(); // the user args will
 
 ```typescript
 import { Command } from 'commander';
+// argument must match with <filename>.cmd
 const commander = new Command('dateago'); // dateago - will be show when calling --help flag
 commander
     .version(require('./../package.json').version, '-v, --version', 'Output current version')

@@ -27,7 +27,7 @@ This assumes you have knowledge on the following:
 3. Create your `<name>.cmd` file in root directory
 4. `npm install commander` for handling options like version, help, etc
 5. Import commander codes in your core logic (see [Commander](#commander))
-6. Specify version and `"main"` in package.json: `dist/main.js`
+6. Specify `version` and `"main"` in package.json: `dist/main.js`
 
 Done!
 
@@ -50,6 +50,9 @@ node %dp0% %*
 ```
 
 Running `dateago -v` will be intercept by `Commander` via `.parse()`
+```
+```
+
 ```cli
 dateago -v
 dateago --help
@@ -70,14 +73,14 @@ Typescript
 
 ```typescript
 import { Command } from 'commander';
-const commander = new Command();
+const commander = new Command('dateago'); // dateago - will be show when calling --help flag
 commander
     .version(require('./../package.json').version, '-v, --version', 'Output current version')
-    .usage('<command> [options]')
+    .usage('<pastDate, futureDate?> [options]')
     .helpOption('-h, --help', 'Output usage information');
 
 commander.parse(process.argv);
-// if (!process.argv.slice(2).length) commander.outputHelp();
+if (!process.argv.slice(2).length) commander.outputHelp(); // the user args will always start at index 2
 ```
 
 Javascript
@@ -86,21 +89,21 @@ Javascript
 const commander = require('commander');
 commander
     .version(require('./../package.json').version, '-v, --version', 'Output current version')
-    .usage('<command> [options]')
+    .usage('<pastDate, futureDate?> [options]')
     .helpOption('-h, --help', 'Output usage information');
 
 commander.parse(process.argv);
-// if (!process.argv.slice(2).length) commander.outputHelp();
+if (!process.argv.slice(2).length) commander.outputHelp(); // the user args will always start at index 2
 ```
 
 ## Commander with additional options
 
 ```typescript
 import { Command } from 'commander';
-const commander = new Command();
+const commander = new Command('dateago'); // dateago - will be show when calling --help flag
 commander
     .version(require('./../package.json').version, '-v, --version', 'Output current version')
-    .usage('<command> [options]')
+    .usage('<pastDate, futureDate?> [options]')
     .helpOption('-h, --help', 'Output usage information')
 
     .option('-d, --debug', 'Output extra debugging')
@@ -109,10 +112,12 @@ commander
     .option('-p, --pizza-type <type>', 'Outputs a phrase about pizza', 'vegetarian');
 
 commander.parse(process.argv);
+if (!process.argv.slice(2).length) commander.outputHelp(); // the user args will always start at index 2
 
-const options = commander.opts()
-if (options.debug) console.log(options)
-if (options.hh) {} // same with options.hours or options.hour depending on how you declared it in .option()
+const options = commander.opts();
+if (options.debug) console.log(options);
+if (options.hh) {
+} // same with options.hours or options.hour depending on how you declared it in .option()
 if (options.pizzaType) console.log(`Your pizza type is: ${options.pizzaType}`);
 ```
 

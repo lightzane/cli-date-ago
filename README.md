@@ -6,9 +6,12 @@ Your own customized CLI that depends on NodeJS which can run on CMD
 
 ```
 npm i
+npm start
 dateago --version
 dateago 1/7/2022 1/10/2022 -hh -mm
 ```
+
+> You only need to do `npm start` to build the `dist` folder to start using the `dateago` keyword in your CMD.
 
 ### Create your own CLI
 
@@ -28,6 +31,8 @@ This assumes you have knowledge on the following:
 4. `npm install commander` for handling options like version, help, etc
 5. Import commander codes in your core logic (see [Commander](#commander))
 6. Specify `version` and `"main"` in package.json: `dist/main.js`
+
+> **Important**: `"main": "dist/main.js"` must be specified to let nodejs know which file to execute.
 
 Done!
 
@@ -109,8 +114,8 @@ commander
     .helpOption('-h, --help', 'Output usage information')
 
     .option('-d, --debug', 'Output extra debugging')
-    .option('-hh, --hours', 'Display time as hour')
-    .option('-mm, --minutes', 'Display time as minutes')
+    .option('-hh, --hours', 'Display time in hour')
+    .option('-mm, --minutes', 'Display time in minutes')
     .option('-p, --pizza-type <type>', 'Outputs a phrase about pizza', 'vegetarian');
 
 commander.parse(process.argv);

@@ -12,9 +12,11 @@ commander
 
     .option('-a, --author', 'Outputs the author of this code')
     .option('-d, --debug', 'Output extra debugging')
-    .option('-dd, --days', 'Display time as days')
-    .option('-hh, --hours', 'Display time as hours')
-    .option('-mm, --minutes', 'Display time as minutes');
+    .option('-yr, --years', 'Display time in years')
+    .option('-mo, --months', 'Display time in months')
+    .option('-dd, --days', 'Display time in days')
+    .option('-hh, --hours', 'Display time in hours')
+    .option('-mm, --minutes', 'Display time in minutes');
 // .option('-p, --pizza-type <type>', 'Outputs a phrase about pizza', 'vegetarian'); // vegetarian = default value
 
 commander.parse(process.argv);
@@ -87,6 +89,8 @@ function dateAgo(pastDate: string, futureDate?: string): string {
 
 console.log(dateAgo(pastDate, futureDate));
 
+if (options.years) console.log(Math.floor(timeDiff / 60 / 60 / 24 / 30 / 12) + ' years ' + ago);
+if (options.months) console.log(Math.floor(timeDiff / 60 / 60 / 24 / 30) + ' months ' + ago);
 if (options.days) console.log(Math.floor(timeDiff / 60 / 60 / 24) + ' days ' + ago);
 if (options.hours) console.log(Math.floor(timeDiff / 60 / 60) + ' hours ' + ago);
 if (options.minutes) console.log(Math.floor(timeDiff / 60) + ' minutes ' + ago);
